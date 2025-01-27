@@ -112,7 +112,8 @@
 
 -- Drop existing tables, so you'll start fresh each time this script is run.
 DROP TABLE IF EXISTS films;
-DROP TABLE IF EXISTS talent;
+DROP TABLE IF EXISTS actors;
+DROP TABLE IF EXISTS film_talent;
 DROP TABLE IF EXISTS studios;
 
 -- Create new tables, according to your domain model
@@ -133,7 +134,8 @@ CREATE TABLE film_talent (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     actor_id INTEGER,
     film_id INTEGER,
-    character_name TEXT
+    character_name TEXT,
+    billing_order INTEGER
 );
 
 CREATE TABLE studios (
@@ -171,23 +173,24 @@ INSERT INTO actors (
 INSERT INTO film_talent (
     actor_id,
     film_id,
-    character_name
+    character_name,
+    billing_order
 ) VALUES
-    (1, 1, "Bruce Wayne"),
-    (1, 2, "Bruce Wayne"),
-    (1, 3, "Bruce Wayne"),
-    (2, 1, "Alfred"),
-    (2, 2, "Alfred"),
-    (3, 1, "Ra's Al Ghul"),
-    (4, 1, "Rachel Dawes"),
-    (5, 1, "Commissioner Gordon"),
-    (5, 3, "Commissioner Gordon"),
-    (6, 2, "Joker"),
-    (7, 2, "Harvey Dent"),
-    (8, 2, "Rachel Dawes"),
-    (9, 3, "Bane"),
-    (10, 3, "John Blake"),
-    (11, 3, "Selina Kyle");
+    (1, 1, "Bruce Wayne", 1),
+    (1, 2, "Bruce Wayne", 1),
+    (1, 3, "Bruce Wayne", 1),
+    (2, 1, "Alfred", 2),
+    (2, 2, "Alfred", 4),
+    (3, 1, "Ra's Al Ghul", 3),
+    (4, 1, "Rachel Dawes", 4),
+    (5, 1, "Commissioner Gordon", 5),
+    (5, 3, "Commissioner Gordon", 2),
+    (6, 2, "Joker", 2),
+    (7, 2, "Harvey Dent", 3),
+    (8, 2, "Rachel Dawes", 5),
+    (9, 3, "Bane", 3),
+    (10, 3, "John Blake", 4),
+    (11, 3, "Selina Kyle", 5);
 
 INSERT INTO studios (
     studio_name
@@ -201,7 +204,10 @@ INSERT INTO studios (
 .print ""
 
 -- The SQL statement for the movies output
--- TODO!
+SELECT films.title, films.year_released, films.mpaa_rating, studios.studio_name
+FROM films
+INNER JOIN studios ON films.studio_id = studios.id
+ORDER BY films.year_released ASC;
 
 -- Prints a header for the cast output
 .print ""
@@ -211,4 +217,9 @@ INSERT INTO studios (
 
 
 -- The SQL statement for the cast output
--- TODO!
+SELECT films.title, actors.actor_name, film_talent.character_name
+FROM film_talent
+INNER JOIN films ON film_talent.film_id = films.id
+INNER JOIN actors ON film_talent.actor_id = actors.id
+ORDER BY films.title ASC, film_talent.billing_order ASC;
+
