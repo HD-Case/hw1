@@ -111,14 +111,89 @@
 .headers off
 
 -- Drop existing tables, so you'll start fresh each time this script is run.
--- TODO!
+DROP TABLE IF EXISTS films;
+DROP TABLE IF EXISTS talent;
+DROP TABLE IF EXISTS studios;
 
 -- Create new tables, according to your domain model
--- TODO!
+CREATE TABLE films (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title TEXT,
+    year_released INTEGER,
+    mpaa_rating TEXT,
+    studio_id
+);
+
+CREATE TABLE actors (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    actor_name TEXT
+);
+
+CREATE TABLE film_talent (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    actor_id INTEGER,
+    film_id INTEGER,
+    character_name TEXT
+);
+
+CREATE TABLE studios (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    studio_name TEXT
+);
 
 -- Insert data into your database that reflects the sample data shown above
 -- Use hard-coded foreign key IDs when necessary
--- TODO!
+INSERT INTO films (
+    title,
+    year_released,
+    mpaa_rating,
+    studio_id
+) VALUES 
+    ("Batman Begins", 2005, "PG-13", 1),
+    ("The Dark Knight", 2008, "PG-13", 1),
+    ("The Dark Knight Rises", 2012, "PG-13",1);
+
+INSERT INTO actors (
+    actor_name
+) VALUES
+    ("Christian Bale"),
+    ("Michael Caine"),
+    ("Liam Neeson"),
+    ("Katie Holmes"),
+    ("Gary Oldman"),
+    ("Heath Ledger"),
+    ("Aaron Eckhart"),
+    ("Maggie Gyllenhaal"),
+    ("Tom Hardy"),
+    ("Joseph Gordon-Levitt"),
+    ("Anne Hathaway");
+
+INSERT INTO film_talent (
+    actor_id,
+    film_id,
+    character_name
+) VALUES
+    (1, 1, "Bruce Wayne"),
+    (1, 2, "Bruce Wayne"),
+    (1, 3, "Bruce Wayne"),
+    (2, 1, "Alfred"),
+    (2, 2, "Alfred"),
+    (3, 1, "Ra's Al Ghul"),
+    (4, 1, "Rachel Dawes"),
+    (5, 1, "Commissioner Gordon"),
+    (5, 3, "Commissioner Gordon"),
+    (6, 2, "Joker"),
+    (7, 2, "Harvey Dent"),
+    (8, 2, "Rachel Dawes"),
+    (9, 3, "Bane"),
+    (10, 3, "John Blake"),
+    (11, 3, "Selina Kyle");
+
+INSERT INTO studios (
+    studio_name
+) VALUES (
+    "Warner Bros."
+);
 
 -- Prints a header for the movies output
 .print "Movies"
